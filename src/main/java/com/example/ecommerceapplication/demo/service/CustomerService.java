@@ -12,4 +12,9 @@ public interface CustomerService {
     CustomerDTO customerLogin (String email, String password);
 
     CustomerDTO customerSignup (CustomerDTO customerDTO);
+
+    CustomerDTO updateCustomer (CustomerDTO customerDTO, int customerId);
+
+    void deleteCustomerById(int customerId);
+
 }

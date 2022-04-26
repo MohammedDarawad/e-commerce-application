@@ -1,6 +1,8 @@
 package com.example.ecommerceapplication.demo.service.impl;
 
+import com.example.ecommerceapplication.demo.dto.CategoryDTO;
 import com.example.ecommerceapplication.demo.dto.CustomerDTO;
+import com.example.ecommerceapplication.demo.entity.CategoryEntity;
 import com.example.ecommerceapplication.demo.entity.CustomerEntity;
 import com.example.ecommerceapplication.demo.exception.BadRequestException;
 import com.example.ecommerceapplication.demo.exception.ResourceNotFoundException;
@@ -49,6 +51,28 @@ public class CustomerServiceImpl implements CustomerService {
             return mapToDTO(customerRepository.save(customerEntity));
         }
         throw new BadRequestException("customer", "id already used");
+    }
+
+    @Override
+    public void deleteCustomerById(int customerId) {
+        CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("CategoryEntity", "id", customerId));
+        customerRepository.delete(customer);
+    }
+
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO, int customerId) {
+        CustomerEntity customer = customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("CategoryEntity", "id", customerId));
+
+        customer.setAddress(customerDTO.getAddress());
+        customer.setEmail(customerDTO.getEmail());
+        customer.setFirstName(customerDTO.getFirstName());
+        customer.setLastName(customerDTO.getLastName());
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        String hashedPassword = DigestUtils.sha256Hex(customerDTO.getPassword());
+        customer.setPassword(hashedPassword);
+
+        CustomerEntity updatedCustomer = customerRepository.save(customer);
+        return mapToDTO(updatedCustomer);
     }
 
     private CustomerDTO mapToDTO(CustomerEntity customerEntity) {
