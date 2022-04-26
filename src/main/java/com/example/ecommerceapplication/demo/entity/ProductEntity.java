@@ -5,25 +5,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(
-        name = "category"
+        name = "product"
 )
-public class CategoryEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-    @Column(name="categoryid")
-    private int categoryId;
+    @Column(name="productid")
+    private int productId;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="categoryId")
-    private List<ProductEntity> products;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private CategoryEntity categoryId;
 
     @Column(nullable = false)
     private String name;
@@ -31,6 +30,12 @@ public class CategoryEntity {
     @Column(nullable = false)
     private String description;
 
-    @Column(name="numofproducts", nullable = false)
-    private int numOfProducts;
+    @Column(name="instock", nullable = false)
+    private int inStock;
+
+    @Column(nullable = false)
+    private double price;
+
+    @Column(name="supplierid", nullable = false)
+    private int supplierId;
 }
