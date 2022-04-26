@@ -1,7 +1,6 @@
 package com.example.ecommerceapplication.demo.controller;
 
 import com.example.ecommerceapplication.demo.dto.CategoryDTO;
-import com.example.ecommerceapplication.demo.exception.BadRequestException;
 import com.example.ecommerceapplication.demo.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
