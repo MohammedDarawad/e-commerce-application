@@ -29,10 +29,6 @@ public class CategoryResource {
 
     @PostMapping("/createCategory")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDto) {
-//        if (categoryDto != null) {
-//            throw new BadRequestException(CategoryResource.class.getSimpleName(),
-//                    "Id");
-//        }
         return new ResponseEntity<>(categoryService.createCategory(categoryDto), HttpStatus.CREATED);
     }
 

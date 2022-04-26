@@ -36,7 +36,7 @@ public class CustomerResource {
 
     @PostMapping("/signup")
     public ResponseEntity<CustomerDTO> customer(@RequestBody CustomerDTO customerDTO) {
-        return ResponseEntity.ok().body(customerService.customerSignup(customerDTO));
+        return new ResponseEntity<>(customerService.customerSignup(customerDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateCustomer")
