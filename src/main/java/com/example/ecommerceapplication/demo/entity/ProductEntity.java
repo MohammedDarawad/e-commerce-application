@@ -18,11 +18,11 @@ public class ProductEntity {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-    @Column(name="productid")
     private int productId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private CategoryEntity categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryid")
+    private CategoryEntity category;
 
     @Column(nullable = false)
     private String name;

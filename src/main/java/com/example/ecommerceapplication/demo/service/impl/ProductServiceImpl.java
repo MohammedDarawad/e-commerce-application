@@ -1,11 +1,15 @@
 package com.example.ecommerceapplication.demo.service.impl;
 
 import com.example.ecommerceapplication.demo.dto.ProductDTO;
+import com.example.ecommerceapplication.demo.entity.CategoryEntity;
 import com.example.ecommerceapplication.demo.entity.ProductEntity;
 import com.example.ecommerceapplication.demo.exception.ResourceNotFoundException;
+import com.example.ecommerceapplication.demo.repository.CategoryRepository;
 import com.example.ecommerceapplication.demo.repository.ProductRepository;
 import com.example.ecommerceapplication.demo.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +18,12 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    private ModelMapper mapper;
+
 
     public ProductServiceImpl(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -32,23 +42,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(ProductDTO productDTO, int productId) {
-        ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("CategoryEntity", "id", productId));
-
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setInStock(productDTO.getInStock());
-        product.setSupplierId(productDTO.getSupplierId());
-        //product.setCategoryId(productDTO.getCategoryId());
-
-        ProductEntity updatedProduct = productRepository.save(product);
-        return mapToDTO(updatedProduct);
-    }
-
-    @Override
-    public ProductDTO addProduct(ProductDTO productDTO) {
+    public ProductDTO addProduct(ProductDTO productDTO, int categoryId) {
+        productDTO.setCategoryid(categoryId);
+        System.out.println(productDTO);
         ProductEntity product = mapToEntity(productDTO);
+
+        CategoryEntity category = categoryRepository.findById(categoryId).orElseThrow(
+                () -> new ResourceNotFoundException("category", "id", categoryId));
+
+        product.setCategory(category);
         ProductEntity newProduct = productRepository.save(product);
 
         ProductDTO productResponse = mapToDTO(newProduct);
@@ -64,24 +66,23 @@ public class ProductServiceImpl implements ProductService {
     private ProductDTO mapToDTO(ProductEntity productEntity) {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProductId(productEntity.getProductId());
-        productDTO.setCategoryId(productEntity.getCategoryId().getCategoryId());
         productDTO.setPrice(productEntity.getPrice());
-        productDTO.setInStock(productEntity.getInStock());
-        productDTO.setSupplierId(productEntity.getSupplierId());
-        productDTO.setName(productEntity.getName());
         productDTO.setDescription(productEntity.getDescription());
+        productDTO.setName(productEntity.getName());
+        productDTO.setSupplierId(productEntity.getSupplierId());
+        productDTO.setInStock(productEntity.getInStock());
+        productDTO.setCategoryid(productEntity.getCategory().getCategoryId());
         return productDTO;
     }
 
     private ProductEntity mapToEntity(ProductDTO productDTO) {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setProductId(productDTO.getProductId());
-        //productEntity.setCategoryId(productDTO.getCategoryId());
         productEntity.setPrice(productDTO.getPrice());
-        productEntity.setInStock(productDTO.getInStock());
-        productEntity.setSupplierId(productDTO.getSupplierId());
-        productEntity.setName(productDTO.getName());
         productEntity.setDescription(productDTO.getDescription());
+        productEntity.setName(productDTO.getName());
+        productEntity.setSupplierId(productDTO.getSupplierId());
+        productEntity.setInStock(productDTO.getInStock());
         return productEntity;
     }
 }

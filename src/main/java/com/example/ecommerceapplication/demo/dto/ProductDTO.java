@@ -17,7 +17,7 @@ public class ProductDTO {
 
     private double price;
 
-    private int categoryId;
-
     private int supplierId;
+
+    private int categoryid;
 }

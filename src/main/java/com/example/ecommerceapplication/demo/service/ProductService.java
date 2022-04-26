@@ -9,9 +9,7 @@ public interface ProductService {
 
     ProductDTO getProductById(int productId);
 
-    ProductDTO updateProduct(ProductDTO productDTO, int productId);
-
-    ProductDTO addProduct(ProductDTO productDTO);
+    ProductDTO addProduct(ProductDTO productDTO, int categoryId);
 
     void removeProduct(int productId);
 }

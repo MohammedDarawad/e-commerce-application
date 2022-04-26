@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -19,31 +20,22 @@ public class ProductResource {
     private ProductService productService;
 
     @GetMapping("/getAllProducts")
-    public ResponseEntity<List<ProductDTO>> getAllCategories() {
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         return ResponseEntity.ok().body(productService.getAllProducts());
     }
 
     @GetMapping("/getProductById")
-    public ResponseEntity<ProductDTO> getCategoryById(@RequestParam(name = "id") int categoryId) {
+    public ResponseEntity<ProductDTO> getProductById(@RequestParam(name = "id") int categoryId) {
         return ResponseEntity.ok(productService.getProductById(categoryId));
     }
 
-    @PostMapping("/addProduct")
-    public ResponseEntity<ProductDTO> createCategory(@Valid @RequestBody ProductDTO productDTO) {
-//        if (categoryDto != null) {
-//            throw new BadRequestException(CategoryResource.class.getSimpleName(),
-//                    "Id");
-//        }
-        return new ResponseEntity<>(productService.addProduct(productDTO), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/updateProduct")
-    public ResponseEntity<ProductDTO> updateCategory(@Valid @RequestBody ProductDTO productDTO) {
-        return new ResponseEntity<>(productService.updateProduct(productDTO, productDTO.getProductId()), HttpStatus.OK);
+    @PostMapping("/{categoryId}/addProduct")
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO, @PathVariable(value = "categoryId") int categoryId) {
+        return new ResponseEntity<>(productService.addProduct(productDTO, categoryId), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/removeProduct")
-    public ResponseEntity<String> deleteCategory(@RequestParam(name = "id") int categoryId) {
+    public ResponseEntity<String> deleteProduct(@RequestParam(name = "id") int categoryId) {
         productService.removeProduct(categoryId);
         return new ResponseEntity<>("Deleted successfully.", HttpStatus.OK);
     }

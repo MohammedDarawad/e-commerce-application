@@ -22,7 +22,7 @@ public class CategoryEntity {
     @Column(name="categoryid")
     private int categoryId;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="categoryId")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy="category")
     private List<ProductEntity> products;
 
     @Column(nullable = false)
